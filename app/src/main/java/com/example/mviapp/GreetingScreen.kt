@@ -17,6 +17,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
@@ -25,6 +26,7 @@ fun GreetingScreen(viewModel: GreetingViewModel = viewModel()) {
 
     //User types a name and taps a button → app shows: "Hello, [Name]"
     val state by viewModel.state.collectAsState()
+    val focusManager = LocalFocusManager.current
 
     Column(
         modifier = Modifier.fillMaxSize().padding(32.dp),
@@ -44,12 +46,14 @@ fun GreetingScreen(viewModel: GreetingViewModel = viewModel()) {
 
         Button(
             onClick = {
-            viewModel.processIntent(GreetingIntent.Greet)
+                focusManager.clearFocus()
+                viewModel.processIntent(GreetingIntent.Greet)
             },
             modifier = Modifier.align(Alignment.End)
         ) {
             Text(text = "Greet")
         }
+
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
